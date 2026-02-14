@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/app/services/auth_service.py" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/app/sql_tables/create_database.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/app/sql_tables/create_tables.sql" dialect="MySQL" />
+    <file url="PROJECT" dialect="MySQL" />
+  </component>
+</project>

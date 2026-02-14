@@ -1,0 +1,2 @@
+1. on refresh token fetch token by itself from db
+2. updated_at column in user table
