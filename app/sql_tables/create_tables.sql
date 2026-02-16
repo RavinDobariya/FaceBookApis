@@ -54,5 +54,26 @@ CREATE TABLE refresh_token (
 );
 
 
+
+CREATE TABLE audit_log (
+  id CHAR(36) NOT NULL,
+  action VARCHAR(255) NOT NULL,
+  entity_id CHAR(36) NOT NULL,
+  user_id CHAR(36) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (id),
+
+  KEY index_audit_entity_id (entity_id),
+  KEY index_audit_user_id (user_id),
+  KEY index_audit_action (action),
+
+  CONSTRAINT fk_audit_user
+    FOREIGN KEY (user_id) REFERENCES user(id)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE
+);
+
+
 SELECT * FROM user;
 show create table user;

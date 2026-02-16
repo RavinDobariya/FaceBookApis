@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from fastapi.encoders import jsonable_encoder
-
+from app.services.audit_service import create_audit_log
 from app.utils.logger import logger,log_exception
 import uuid
 from datetime import datetime
@@ -81,6 +81,7 @@ def friend_req(friend_id:str,user,cursor,conn):
 ))
 
         conn.commit()
+        create_audit_log("FRIEND_REQUEST_SENT",friend_id,user["id"])
         return { "message": f"Friend request sent to {friend_id}"}
     except HTTPException:
         raise
@@ -110,6 +111,7 @@ def accept_friend_req(friend_id,user,cursor,conn,accept: bool = False):
         if not accept:
             cursor.execute("UPDATE friends SET friend_status=%s,updated_at=%s WHERE id=%s and receiver_id=%s",[ "rejected",datetime.now(),friend_id,user["id"]])
             conn.commit()
+            create_audit_log("FRIEND_REQUEST_DECLINED",friend_id,user["id"])
             return { "message": "Friend request declined"}
         cursor.execute("SELECT id FROM `friends` where id=%s",[friend_id])
         user_data = cursor.fetchone()
@@ -118,6 +120,7 @@ def accept_friend_req(friend_id,user,cursor,conn,accept: bool = False):
 
         cursor.execute("UPDATE friends SET friend_status=%s,updated_at=%s WHERE id=%s and receiver_id=%s",[ "accepted",datetime.now(),friend_id,user["id"]])
         conn.commit()
+        create_audit_log("FRIEND_REQUEST_ACCEPTED",friend_id,user["id"])
         return { "message": f"Friend request accepted to {friend_id}"}
     except HTTPException:
         raise
